@@ -4,6 +4,11 @@
     <div class="brand">Todo List App</div>
   </nav>
   <main class="container">
+    <Alert
+      message="Todo title is required!"
+      :show="showAlert"
+      @close="showAlert = false"
+    />
     <section>
       <form class="add-todo-form">
         <input v-model="todoTitle" type="text" placeholder="Todo Title" />
@@ -27,15 +32,24 @@
 </template>
 
 <script>
+import Alert from "./components/Alert.vue";
 export default {
+  components: {
+    Alert,
+  },
   data() {
     return {
       todoTitle: "",
       todos: [],
+      showAlert: false,
     };
   },
   methods: {
     addTodo() {
+      if (this.todoTitle === "") {
+        this.showAlert = true;
+        return;
+      }
       this.todos = [
         ...this.todos,
         { title: this.todoTitle, id: Math.floor(Math.random() * 1000) },
